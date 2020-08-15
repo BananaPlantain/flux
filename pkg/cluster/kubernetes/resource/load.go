@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/pkg/errors"
 	sops "go.mozilla.org/sops/v3"
@@ -207,7 +208,7 @@ func loadFile(path string, sopsEnabled bool) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if sopsEnabled {
+	if sopsEnabled && strings.Contains(string(bytes), "sops:") {
 		return softDecrypt(bytes)
 	}
 	return bytes, nil
